@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:homestay/views/homestay.dart';
 
 import '../models/user.dart';
 import 'MainScreen.dart';
@@ -21,11 +22,29 @@ class _MainManueState extends State<MainManue> {
       elevation: 10,
       child: ListView(children: [
         UserAccountsDrawerHeader(
-          accountEmail: Text(widget.user.email.toString()),
-          accountName: Text(widget.user.name.toString()),
-          currentAccountPicture: const CircleAvatar(
-            radius: 30.0,
-          ),
+            accountName: Text(widget.user.name.toString()),
+            accountEmail: Text(widget.user.email.toString())),
+        ListTile(
+          title: const Text('Home Stay'),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (content) => MainScreen(
+                          user: widget.user,
+                        )));
+          },
+        ),
+        ListTile(
+          title: const Text('Oner page'),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (content) => HomeStay(user: widget.user)));
+          },
         ),
       ]),
     );

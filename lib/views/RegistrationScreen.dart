@@ -202,7 +202,7 @@ class _registration002State extends State<registration002> {
   }
 
   String? validatePassword(String value) {
-    String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$';
+    String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{4,}$';
     RegExp regex = RegExp(pattern);
     if (value.isEmpty) {
       return 'Please enter password';
@@ -335,7 +335,7 @@ class _registration002State extends State<registration002> {
   }
 
   void _registeruser(String name, String email, String phone, String password) {
-    http.post(Uri.parse("http://10.19.42.192/mypassarv2/php/register_user.php"),
+    http.post(Uri.parse("http://10.19.42.192/homestay/php/register_user.php"),
         body: {
           "name": name,
           "email": email,

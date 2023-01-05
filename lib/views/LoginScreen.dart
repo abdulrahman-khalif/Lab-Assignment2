@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:homestay/views/homestay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -162,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     String _email = email_input.text;
     String _pass = pass_input.text;
-    http.post(Uri.parse("http://10.19.42.192/mypassarv2/php/login_user.php"),
+    http.post(Uri.parse("http://10.19.42.192/homestay/php/login_user.php"),
         body: {"email": _email, "password": _pass}).then((response) {
       print(response.body);
       var jsonResponse = json.decode(response.body);
@@ -171,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
         User user = User.fromJson(jsonResponse['data']);
         print(user.phone);
         Navigator.push(context,
-            MaterialPageRoute(builder: (content) => MainScreen(user: user)));
+            MaterialPageRoute(builder: (content) => HomeStay(user: user)));
       } else {
         Fluttertoast.showToast(
             msg: "Login Failed",
