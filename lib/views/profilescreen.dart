@@ -194,9 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      _updateNameDialog();
-                                    },
+                                    onPressed: () {},
                                     iconSize: 16,
                                   ),
                                 ]),
@@ -212,9 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const Text("UPDATE PHONE"),
                                   IconButton(
                                     icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      _updatePhoneDialog();
-                                    },
+                                    onPressed: () {},
                                     iconSize: 16,
                                   ),
                                 ]),
@@ -227,9 +223,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const Text("UPDATE PASSWORD"),
                                   IconButton(
                                     icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      _changePassDialog();
-                                    },
+                                    onPressed: () {},
                                     iconSize: 16,
                                   ),
                                 ]),
@@ -246,9 +240,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   IconButton(
                                     icon: const Icon(
                                         Icons.app_registration_rounded),
-                                    onPressed: () {
-                                      _registerAccountDialog();
-                                    },
+                                    onPressed: () {},
                                     iconSize: 16,
                                   ),
                                 ]),
@@ -264,9 +256,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const Text("LOGIN"),
                                   IconButton(
                                     icon: const Icon(Icons.login),
-                                    onPressed: () {
-                                      _loginDialog();
-                                    },
+                                    onPressed: () {},
                                     iconSize: 16,
                                   ),
                                 ]),
@@ -282,9 +272,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const Text("LOGOUT"),
                                   IconButton(
                                     icon: const Icon(Icons.logout),
-                                    onPressed: () {
-                                      _logoutDialog();
-                                    },
+                                    onPressed: () {},
                                     iconSize: 16,
                                   ),
                                 ]),

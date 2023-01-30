@@ -240,8 +240,8 @@ class _NewHome extends State<NewHome> {
                         Flexible(
                             flex: 5,
                             child: CheckboxListTile(
-                              title:
-                                  const Text("Lawfull Item?"), //    <‐‐ label
+                              title: const Text(
+                                  "accept agreement"), //    <‐‐ label
                               value: _isChecked,
                               onChanged: (bool? value) {
                                 setState(() {

@@ -239,8 +239,8 @@ class _UpdateDetailsHomeState extends State<UpdateDetailsHome> {
                           Flexible(
                               flex: 5,
                               child: CheckboxListTile(
-                                title:
-                                    const Text("Lawfull Item?"), //    <‐‐ label
+                                title: const Text(
+                                    "Accept agreement?"), //    <‐‐ label
                                 value: _isChecked,
                                 onChanged: (bool? value) {
                                   setState(() {
