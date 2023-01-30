@@ -14,18 +14,18 @@ if (!isset($_GET['userid'])) {
 	if ($result->num_rows > 0) {
 		$homesarray["homes"] = array();
 		while ($row = $result->fetch_assoc()) {
-			$prlist = array();
-			$prlist['home_id'] = $row['home_id'];
-			$prlist['user_id'] = $row['user_id'];
-			$prlist['name'] = $row['name'];
-			$prlist['home_desc'] = $row['home_desc'];
-			$prlist['price'] = $row['price'];
-			$prlist['states'] = $row['states'];
-			$prlist['local'] = $row['local'];
-			$prlist['lat'] = $row['lat'];
-			$prlist['lng'] = $row['lng'];
-			$prlist['date'] = $row['date'];
-			array_push($homesarray["homes"],$prlist);
+			$holist = array();
+			$holist['home_id'] = $row['home_id'];
+			$holist['user_id'] = $row['user_id'];
+			$holist['name'] = $row['name'];
+			$holist['home_desc'] = $row['home_desc'];
+			$holist['price'] = $row['price'];
+			$holist['states'] = $row['states'];
+			$holist['local'] = $row['local'];
+			$holist['lat'] = $row['lat'];
+			$holist['lng'] = $row['lng'];
+			$holist['date'] = $row['date'];
+			array_push($homesarray["homes"],$holist);
 			
 			
 		}

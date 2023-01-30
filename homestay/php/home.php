@@ -8,7 +8,7 @@
 include_once("dbconnect3.php");
 	
 	$userid = $_POST['userid'];
-  $onername= addslashes($_POST['name']);
+  $homename= addslashes($_POST['name']);
 	$homedesc= addslashes ($_POST['homedesc']);
 	$price= $_POST['price'];
   $state= addslashes($_POST['state']);
@@ -20,7 +20,7 @@ include_once("dbconnect3.php");
  $image_tree= $_POST['image_tree'];
 
 	
-	$sqlinsert = "INSERT INTO `homes`(`user_id`, `name`, `home_desc`, `price`, `states`, `local`, `lat`, `lng`) VALUES ('$userid','$onername','$homedesc',$price,'$state','$local','$lat','$lon')";
+	$sqlinsert = "INSERT INTO `homes`(`user_id`, `name`, `home_desc`, `price`, `states`, `local`, `lat`, `lng`) VALUES ('$userid','$homename','$homedesc',$price,'$state','$local','$lat','$lon')";
 	
  if ($conn->query($sqlinsert) === TRUE) {
 			$decoded_image = base64_decode($image_one);
