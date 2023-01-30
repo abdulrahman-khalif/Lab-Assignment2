@@ -22,7 +22,7 @@ class _MySplaschScreen extends State<MySplaschScreen> {
         email: "unregistered",
         name: "unregistered",
         address: "na",
-        phone: "0123456789",
+        phone: " - ",
         regdate: "0");
 
     Timer(

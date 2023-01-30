@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:homestay/views/homestay.dart';
+import 'package:homestay/views/OnerScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+import '../ServerConfig.dart';
 import '../models/user.dart';
+import '../utils/mycolor.dart';
 import 'MainScreen.dart';
 import 'RegistrationScreen.dart';
 
@@ -33,8 +35,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColors.kBgColor,
         appBar: AppBar(
-          title: const Text("Login:"),
+          title: const Text("Login:",
+              style: TextStyle(
+                color: Colors.black,
+              )),
         ),
         body: Center(
             child: SingleChildScrollView(
@@ -135,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            const registration002()))
+                                            const RegistrationScreen()))
                               },
                           child: const Text(
                             " Click here",
@@ -163,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     String _email = email_input.text;
     String _pass = pass_input.text;
-    http.post(Uri.parse("http://10.19.42.192/homestay/php/login_user.php"),
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/login_user.php"),
         body: {"email": _email, "password": _pass}).then((response) {
       print(response.body);
       var jsonResponse = json.decode(response.body);
@@ -172,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
         User user = User.fromJson(jsonResponse['data']);
         print(user.phone);
         Navigator.push(context,
-            MaterialPageRoute(builder: (content) => HomeStay(user: user)));
+            MaterialPageRoute(builder: (content) => OnerScreen(user: user)));
       } else {
         Fluttertoast.showToast(
             msg: "Login Failed",

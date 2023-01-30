@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,22 +7,29 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homestay/models/User.dart';
 import 'package:homestay/views/LoginScreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../ServerConfig.dart';
+import '../utils/mycolor.dart';
 import 'MainScreen.dart';
 
-class registration002 extends StatefulWidget {
-  const registration002({super.key});
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
 
   @override
-  State<registration002> createState() => _registration002State();
+  State<RegistrationScreen> createState() => _RegistrationScreen();
 }
 
-class _registration002State extends State<registration002> {
+class _RegistrationScreen extends State<RegistrationScreen> {
   @override
   void initState() {
     super.initState();
     loadEola();
   }
+
+  var pathAsset = "assets/images/camera.png";
+  File? _imageone;
 
   bool _isChecked = false;
   String eula = "";
@@ -40,162 +48,194 @@ class _registration002State extends State<registration002> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Registration")),
+      backgroundColor: AppColors.kBgColor,
+      appBar: AppBar(
+          title: const Text("Registration",
+              style: TextStyle(
+                color: Colors.black,
+              ))),
       body: Center(
           child: SingleChildScrollView(
-        child: Card(
-          margin: const EdgeInsets.all(10),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Form(
-                key: _formKey,
-                child: Column(children: [
-                  TextFormField(
-                      controller: name_input,
-                      validator: (val) => val!.isEmpty || (val.length < 3)
-                          ? "name must be longer than 3"
-                          : null,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                          labelText: 'Name',
-                          labelStyle: TextStyle(),
-                          icon: Icon(Icons.person),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2.0),
-                          ))),
-                  TextFormField(
-                      controller: email_input,
-                      textInputAction: TextInputAction.next,
-                      validator: (val) => val!.isEmpty ||
-                              !val.contains("@") ||
-                              !val.contains(".")
-                          ? "enter a valid email"
-                          : null,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                          labelText: 'Email',
-                          icon: Icon(Icons.email),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2.0),
-                          ))),
-                  TextFormField(
-                      controller: phon_input,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                          labelText: 'Phone',
-                          icon: Icon(Icons.phone),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2.0),
-                          ))),
-                  TextFormField(
-                      controller: pass_input,
-                      validator: (val) => validatePassword(val.toString()),
-                      keyboardType: TextInputType.emailAddress,
-                      obscureText: _passwordVisible,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        icon: const Icon(Icons.password),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(width: 2.0),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _passwordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisible = !_passwordVisible;
-                            });
-                          },
-                        ),
-                      )),
-                  TextFormField(
-                      controller: repass_input,
-                      validator: (val) => validatePassword(val.toString()),
-                      keyboardType: TextInputType.emailAddress,
-                      obscureText: _passwordVisible2,
-                      decoration: InputDecoration(
-                        labelText: 'Re-Password',
-                        icon: const Icon(Icons.password),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(width: 2.0),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _passwordVisible2
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisible2 = !_passwordVisible2;
-                            });
-                          },
-                        ),
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Checkbox(
-                        value: _isChecked,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _isChecked = value!;
-                          });
-                        },
-                      ),
-                      Flexible(
-                        child: GestureDetector(
-                          onTap: _showEULA,
-                          child: const Text('Agree with terms',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                      ),
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                        minWidth: 115,
-                        height: 50,
-                        color: Theme.of(context).colorScheme.primary,
-                        child: const Text('Register'),
-                        elevation: 10,
-                        onPressed: _registerAccount,
-                      ),
-                    ],
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const Text(" alrady have account? ",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            )),
-                        GestureDetector(
-                            onTap: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const LoginScreen()))
-                                },
-                            child: const Text(
-                              " Click here",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: _selectImage,
+              child: Card(
+                elevation: 8,
+                child: Container(
+                  height: 250,
+                  width: 250,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: _imageone == null
+                        ? AssetImage(pathAsset)
+                        : FileImage(_imageone!) as ImageProvider,
+                    fit: BoxFit.cover,
+                  )),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Card(
+              margin: const EdgeInsets.all(10),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                    key: _formKey,
+                    child: Column(children: [
+                      TextFormField(
+                          controller: name_input,
+                          validator: (val) => val!.isEmpty || (val.length < 3)
+                              ? "name must be longer than 3"
+                              : null,
+                          keyboardType: TextInputType.text,
+                          decoration: const InputDecoration(
+                              labelText: 'Name',
+                              labelStyle: TextStyle(),
+                              icon: Icon(Icons.person),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2.0),
+                              ))),
+                      TextFormField(
+                          controller: email_input,
+                          textInputAction: TextInputAction.next,
+                          validator: (val) => val!.isEmpty ||
+                                  !val.contains("@") ||
+                                  !val.contains(".")
+                              ? "enter a valid email"
+                              : null,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(
+                              labelText: 'Email',
+                              icon: Icon(Icons.email),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2.0),
+                              ))),
+                      TextFormField(
+                          controller: phon_input,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(
+                              labelText: 'Phone',
+                              icon: Icon(Icons.phone),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 2.0),
+                              ))),
+                      TextFormField(
+                          controller: pass_input,
+                          validator: (val) => validatePassword(val.toString()),
+                          keyboardType: TextInputType.emailAddress,
+                          obscureText: _passwordVisible,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            icon: const Icon(Icons.password),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(width: 2.0),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                               ),
-                            ))
-                      ]),
-                ])),
-          ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
+                            ),
+                          )),
+                      TextFormField(
+                          controller: repass_input,
+                          validator: (val) => validatePassword(val.toString()),
+                          keyboardType: TextInputType.emailAddress,
+                          obscureText: _passwordVisible2,
+                          decoration: InputDecoration(
+                            labelText: 'Re-Password',
+                            icon: const Icon(Icons.password),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(width: 2.0),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordVisible2
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible2 = !_passwordVisible2;
+                                });
+                              },
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Checkbox(
+                            value: _isChecked,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _isChecked = value!;
+                              });
+                            },
+                          ),
+                          Flexible(
+                            child: GestureDetector(
+                              onTap: _showEULA,
+                              child: const Text('Agree with terms',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ),
+                          ),
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                            minWidth: 115,
+                            height: 50,
+                            color: Theme.of(context).colorScheme.primary,
+                            child: const Text('Register'),
+                            elevation: 10,
+                            onPressed: _registerAccount,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Text(" alrady have account? ",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                )),
+                            GestureDetector(
+                                onTap: () => {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  const LoginScreen()))
+                                    },
+                                child: const Text(
+                                  " Click here",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ))
+                          ]),
+                    ])),
+              ),
+            ),
+          ],
         ),
       )),
     );
@@ -220,6 +260,16 @@ class _registration002State extends State<registration002> {
     String _email = email_input.text;
     String _password = pass_input.text;
     String _phone = phon_input.text;
+
+    if (_imageone == null) {
+      Fluttertoast.showToast(
+          msg: "Please take picture for your profile",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          fontSize: 14.0);
+      return;
+    }
 
     if (!_formKey.currentState!.validate() && !_isChecked) {
       Fluttertoast.showToast(
@@ -335,14 +385,16 @@ class _registration002State extends State<registration002> {
   }
 
   void _registeruser(String name, String email, String phone, String password) {
-    http.post(Uri.parse("http://10.19.42.192/homestay/php/register_user.php"),
-        body: {
-          "name": name,
-          "email": email,
-          "password": password,
-          "phone": phone,
-          "register": "register"
-        }).then((response) {
+    String base64_Imageone = base64Encode(_imageone!.readAsBytesSync());
+
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/register_user.php"), body: {
+      "name": name,
+      "email": email,
+      "password": password,
+      "phone": phone,
+      "image_one": base64_Imageone,
+      "register": "register"
+    }).then((response) {
       var data = jsonDecode(response.body);
       if (response.statusCode == 200 && data['status'] == 'success') {
         Fluttertoast.showToast(
@@ -362,5 +414,88 @@ class _registration002State extends State<registration002> {
         return;
       }
     });
+  }
+
+  void _selectImage() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+              title: const Text(
+                "Select image from",
+                style: TextStyle(),
+              ),
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                      onPressed: _oncamra, icon: const Icon(Icons.camera)),
+                  IconButton(
+                      onPressed: _ongallrye,
+                      icon: const Icon(Icons.browse_gallery))
+                ],
+              ));
+        });
+  }
+
+  Future<void> _oncamra() async {
+    Navigator.pop(context);
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 800,
+      maxWidth: 800,
+    );
+    if (pickedFile != null) {
+      _imageone = File(pickedFile.path);
+      cropImage();
+      setState(() {});
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future<void> _ongallrye() async {
+    Navigator.pop(context);
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 800,
+      maxWidth: 800,
+    );
+
+    if (pickedFile != null) {
+      _imageone = File(pickedFile.path);
+      cropImage();
+      setState(() {});
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future<void> cropImage() async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: _imageone!.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Color.fromARGB(255, 159, 34, 255),
+            toolbarWidgetColor: Color.fromARGB(255, 22, 6, 21),
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper image 1',
+        ),
+      ],
+    );
+    if (croppedFile != null) {
+      File imageFile = File(croppedFile.path);
+      _imageone = imageFile;
+      setState(() {});
+    }
   }
 }

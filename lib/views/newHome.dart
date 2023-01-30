@@ -9,7 +9,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
 
-import 'homestay.dart';
+import '../ServerConfig.dart';
+import '../utils/mycolor.dart';
+import 'OnerScreen.dart';
 
 class NewHome extends StatefulWidget {
   final User user;
@@ -30,7 +32,7 @@ class _NewHome extends State<NewHome> {
   var m3 = false;
   var pathAsset = "assets/images/camera.png";
 
-  final TextEditingController _OnerNameController = TextEditingController();
+  final TextEditingController _NameController = TextEditingController();
   final TextEditingController _DecController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
@@ -52,8 +54,12 @@ class _NewHome extends State<NewHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColors.kBgColor,
         appBar: AppBar(
-          title: const Text("homestay registration form"),
+          title: const Text("homestay registration form",
+              style: TextStyle(
+                color: Colors.black,
+              )),
         ),
         body: SingleChildScrollView(
             // show image 1
@@ -144,14 +150,14 @@ class _NewHome extends State<NewHome> {
                       // user start register
 
                       TextFormField(
-                          controller: _OnerNameController,
+                          controller: _NameController,
                           textInputAction: TextInputAction.next,
                           validator: (val) => val!.isEmpty || (val.length < 3)
-                              ? " oner name must be longer than 3"
+                              ? " Home stay name must be longer than 3"
                               : null,
                           keyboardType: TextInputType.text,
                           decoration: const InputDecoration(
-                              labelText: 'Oner Name:',
+                              labelText: 'Home stay Name:',
                               labelStyle: TextStyle(),
                               icon: Icon(Icons.person),
                               focusedBorder: OutlineInputBorder(
@@ -224,7 +230,7 @@ class _NewHome extends State<NewHome> {
                                   : null,
                               keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
-                                  labelText: 'Product Price',
+                                  labelText: 'Home Price per Day',
                                   labelStyle: TextStyle(),
                                   icon: Icon(Icons.money),
                                   focusedBorder: OutlineInputBorder(
@@ -249,7 +255,7 @@ class _NewHome extends State<NewHome> {
                         child: ElevatedButton(
                           child: const Text('Add HomeStay'),
                           onPressed: () => {
-                            _newProductDialog(),
+                            _newHomeDialog(),
                           },
                         ),
                       ),
@@ -304,6 +310,7 @@ class _NewHome extends State<NewHome> {
   }
 
   Future<void> _1ongallrye() async {
+    Navigator.pop(context);
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
@@ -314,6 +321,7 @@ class _NewHome extends State<NewHome> {
     if (pickedFile != null) {
       _imageone = File(pickedFile.path);
       cropImage();
+      setState(() {});
     } else {
       print('No image selected.');
     }
@@ -364,6 +372,7 @@ class _NewHome extends State<NewHome> {
   }
 
   Future<void> _2ongallrye() async {
+    Navigator.pop(context);
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
@@ -374,6 +383,7 @@ class _NewHome extends State<NewHome> {
     if (pickedFile != null) {
       _imagetwo = File(pickedFile.path);
       cropImage();
+      setState(() {});
     } else {
       print('No image selected.');
     }
@@ -424,6 +434,7 @@ class _NewHome extends State<NewHome> {
   }
 
   Future<void> _3ongallrye() async {
+    Navigator.pop(context);
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
@@ -434,6 +445,7 @@ class _NewHome extends State<NewHome> {
     if (pickedFile != null) {
       _imagetree = File(pickedFile.path);
       cropImage();
+      setState(() {});
     } else {
       print('No image selected.');
     }
@@ -534,7 +546,7 @@ class _NewHome extends State<NewHome> {
     });
   }
 
-  _newProductDialog() {
+  _newHomeDialog() {
     if (_imageone == null || _imagetwo == null || _imagetree == null) {
       Fluttertoast.showToast(
           msg: "Please take picture of your HomeStay",
@@ -599,7 +611,7 @@ class _NewHome extends State<NewHome> {
   }
 
   void insertHomeStay() {
-    String onername = _OnerNameController.text;
+    String name = _NameController.text;
     String homedesc = _DecController.text;
     String price = _priceController.text;
     String state = _stateController.text;
@@ -607,9 +619,9 @@ class _NewHome extends State<NewHome> {
     String base64_Imageone = base64Encode(_imageone!.readAsBytesSync());
     String base64_Imagetwo = base64Encode(_imagetwo!.readAsBytesSync());
     String base64_Imagetree = base64Encode(_imagetree!.readAsBytesSync());
-    http.post(Uri.parse("http://10.19.42.192/homestay/php/home.php"), body: {
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/home.php"), body: {
       "userid": widget.user.id,
-      "name": onername,
+      "name": name,
       "homedesc": homedesc,
       "price": price,
       "state": state,
@@ -629,7 +641,7 @@ class _NewHome extends State<NewHome> {
             timeInSecForIosWeb: 1,
             fontSize: 14.0);
         Navigator.of(context).pop();
-        MaterialPageRoute(builder: (content) => HomeStay(user: widget.user));
+        MaterialPageRoute(builder: (content) => OnerScreen(user: widget.user));
         return;
       } else {
         Fluttertoast.showToast(
